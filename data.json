@@ -7,7 +7,7 @@
     "announcement": "🎉 Free delivery on orders above ₹500!",
     "address": "11, Model Town, Patiala, Punjab – 147001",
     "phone": "+91 98765 43210",
-    "whatsapp": "919876543210",
+    "whatsapp": "919416304928",
     "email": "order@flavorfusion.in",
     "openHours": "Mon–Sun: 11:00 AM – 11:00 PM",
     "upiId": "flavorfusion@upi",
@@ -55,17 +55,17 @@
     },
     {
       "id": "item_1774968942213_x2ux2u",
-      "categoryId": "Reetu Snacks",
+      "categoryId": "cat_1774957867460_b9jiv7",
       "name": "Reetu chai",
       "description": "very very testy",
       "price": 211,
       "isVeg": false,
       "isFeatured": false,
       "isBestseller": false,
-      "isAvailable": false,
+      "isAvailable": true,
       "image": null
     }
   ],
-  "_lastUpdated": "2026-03-31T14:56:13.842Z",
+  "_lastUpdated": "2026-03-31T16:22:00.438Z",
   "_info": "Flavor Fusion – data.json. Upload to GitHub repo root to publish."
 }
