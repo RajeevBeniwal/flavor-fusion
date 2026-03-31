@@ -23,7 +23,7 @@
     },
     {
       "id": "cat_1774957867460_b9jiv7",
-      "name": "Reetu Snacks",
+      "name": "Snacks",
       "icon": "🥗",
       "order": 2
     },
@@ -43,8 +43,8 @@
   "menuItems": [
     {
       "id": "item_1774968824113_g6x60g",
-      "categoryId": "Desi Flavour",
-      "name": "desi teeeee",
+      "categoryId": "cat_1774957974751_yez1vx",
+      "name": "desi tea",
       "description": "best",
       "price": 125,
       "isVeg": true,
@@ -55,8 +55,8 @@
     },
     {
       "id": "item_1774968942213_x2ux2u",
-      "categoryId": "Reetu Snacks",
-      "name": "Reetu chai",
+      "categoryId": "cat_1774957974751_yez1vx",
+      "name": "Hot chai",
       "description": "very very testy",
       "price": 211,
       "isVeg": false,
@@ -102,6 +102,6 @@
       "image": null
     }
   ],
-  "_lastUpdated": "2026-03-31T17:00:55.898Z",
+  "_lastUpdated": "2026-03-31T17:09:34.470Z",
   "_info": "Flavor Fusion – data.json. Upload to GitHub repo root to publish."
 }
