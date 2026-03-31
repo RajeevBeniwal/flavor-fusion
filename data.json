@@ -29,15 +29,15 @@
     },
     {
       "id": "cat_1774957974751_yez1vx",
-      "name": "चाहरवाला",
+      "name": "Hot feast",
       "icon": "❤️",
       "order": 3
     },
     {
       "id": "cat_1774960035230_jlfcnm",
-      "name": "ADFFGHH",
+      "name": "Cold drinks",
       "icon": "🍽️",
-      "order": 2
+      "order": 4
     }
   ],
   "menuItems": [
@@ -55,7 +55,7 @@
     },
     {
       "id": "item_1774968942213_x2ux2u",
-      "categoryId": "cat_1774957867460_b9jiv7",
+      "categoryId": "Reetu Snacks",
       "name": "Reetu chai",
       "description": "very very testy",
       "price": 211,
@@ -64,8 +64,44 @@
       "isBestseller": false,
       "isAvailable": true,
       "image": null
+    },
+    {
+      "id": "item_1774975380696_2hnnxz",
+      "categoryId": "cat_1774957764120_n0hm0l",
+      "name": "Mithi Lassi",
+      "description": "cow product",
+      "price": 80,
+      "isVeg": true,
+      "isFeatured": false,
+      "isBestseller": true,
+      "isAvailable": true,
+      "image": null
+    },
+    {
+      "id": "item_1774975436992_dkk79z",
+      "categoryId": "cat_1774957764120_n0hm0l",
+      "name": "Rayata",
+      "description": "aa",
+      "price": 120,
+      "isVeg": true,
+      "isFeatured": false,
+      "isBestseller": true,
+      "isAvailable": true,
+      "image": null
+    },
+    {
+      "id": "item_1774975485983_to4zmi",
+      "categoryId": "cat_1774957867460_b9jiv7",
+      "name": "Jalebi",
+      "description": "",
+      "price": 44,
+      "isVeg": true,
+      "isFeatured": false,
+      "isBestseller": false,
+      "isAvailable": true,
+      "image": null
     }
   ],
-  "_lastUpdated": "2026-03-31T16:22:00.438Z",
+  "_lastUpdated": "2026-03-31T17:00:55.898Z",
   "_info": "Flavor Fusion – data.json. Upload to GitHub repo root to publish."
 }
