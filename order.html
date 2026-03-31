@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>Order & Invoice – Flavor Fusion</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .order-steps{display:flex;gap:0;margin-bottom:28px;background:var(--surface);border-radius:var(--rad);border:1px solid var(--border);overflow:hidden}
+    .os{flex:1;padding:14px;text-align:center;font-size:.78rem;font-weight:700;color:var(--text-lt);position:relative;cursor:pointer;transition:all var(--ease)}
+    .os.active{background:var(--red);color:#fff}
+    .os.done{background:var(--green);color:#fff}
+    .os-num{font-size:1rem;display:block;margin-bottom:3px}
+    .wa-btn{background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;padding:15px;border-radius:var(--rad);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;transition:all var(--ease);text-decoration:none;width:100%;margin-bottom:12px}
+    .wa-btn:hover{background:#1ebe57;box-shadow:0 4px 20px rgba(37,211,102,.4);transform:translateY(-1px)}
+    .em-btn{background:#EA4335;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;padding:15px;border-radius:var(--rad);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;transition:all var(--ease);text-decoration:none;width:100%;margin-bottom:12px}
+    .em-btn:hover{background:#c0392b;box-shadow:0 4px 20px rgba(234,67,53,.4);transform:translateY(-1px)}
+    .print-bar{background:linear-gradient(135deg,var(--red-dk),var(--red));padding:12px 20px;display:flex;gap:12px;align-items:center;border-radius:var(--rad) var(--rad) 0 0}
+    .print-bar button{background:#fff;color:var(--red-dk);border:none;padding:8px 20px;border-radius:var(--rad-sm);font-size:.82rem;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all var(--ease)}
+    .print-bar button:hover{box-shadow:0 4px 14px rgba(0,0,0,.15)}
+    .print-bar span{color:rgba(255,255,255,.8);font-size:.78rem;flex:1}
+    @media print{
+      @page{size:A4 portrait;margin:12mm}
+      body{background:#fff;padding:0}
+      .app-bar,.bottom-nav,.fab-cart,.no-print,.announce-bar,.print-bar{display:none!important}
+      .order-wrap{grid-template-columns:1fr}
+      .order-card:first-child{display:none!important}
+      main{padding:0}
+      .invoice-wrap{box-shadow:none}
+      .inv-head{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      .inv-summary{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    }
+  </style>
+</head>
+<body>
+
+<div class="announce-bar no-print" id="announceBar"></div>
+
+<header class="app-bar no-print">
+  <div class="app-bar-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-logo" id="brandLogo">🍽️</div>
+      <span class="brand-name" id="brandName">Flavor Fusion</span>
+    </a>
+    <div class="app-bar-spacer"></div>
+    <nav class="app-bar-nav" id="topNav">
+      <a href="index.html">🏠 Home</a>
+      <a href="menu.html">📋 Menu</a>
+      <a href="order.html" class="active">🛒 Cart</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div style="background:var(--surface2);border-bottom:1px solid var(--border);padding:16px 20px" class="no-print">
+  <div class="container"><h2 style="font-family:'Italiana',serif;font-size:1.6rem">🛒 Your Order</h2></div>
+</div>
+
+<main style="padding:28px 0">
+  <div class="container">
+
+    <!-- EMPTY CART STATE -->
+    <div id="emptyCart" class="empty-state hidden">
+      <div class="es-icon">🛒</div>
+      <h4>Your Cart is Empty</h4>
+      <p>Add some delicious items from our menu!</p>
+      <a href="menu.html" class="btn btn-red" style="margin-top:20px">Browse Menu →</a>
+    </div>
+
+    <div id="orderWrap" class="order-wrap">
+
+      <!-- LEFT: CART + DETAILS -->
+      <div class="no-print">
+
+        <!-- CART REVIEW -->
+        <div class="order-card" style="margin-bottom:20px">
+          <div class="order-card-head">
+            <h3>🛒 Cart Review</h3>
+            <button onclick="Cart.clear();location.reload()" class="btn btn-ghost btn-sm">Clear All</button>
+          </div>
+          <div class="order-card-body" id="cartReview"></div>
+        </div>
+
+        <!-- ORDER TYPE -->
+        <div class="order-card" style="margin-bottom:20px">
+          <div class="order-card-head"><h3>📦 Order Type</h3></div>
+          <div class="order-card-body">
+            <div class="order-type-tabs" id="otTabs">
+              <button class="ot-tab active" data-type="dine-in" onclick="setOrderType('dine-in')"><span class="ot-icon">🍽️</span>Dine-In</button>
+              <button class="ot-tab" data-type="takeaway" onclick="setOrderType('takeaway')"><span class="ot-icon">🛍️</span>Takeaway</button>
+              <button class="ot-tab" data-type="delivery" onclick="setOrderType('delivery')"><span class="ot-icon">🛵</span>Delivery</button>
+            </div>
+            <div id="deliveryFields" style="display:none">
+              <div class="form-group"><label>Delivery Address *</label><textarea class="form-control" id="deliveryAddr" placeholder="House no., Street, Area, Patiala" rows="2"></textarea></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CUSTOMER DETAILS -->
+        <div class="order-card" style="margin-bottom:20px">
+          <div class="order-card-head"><h3>👤 Customer Details</h3></div>
+          <div class="order-card-body">
+            <div class="form-row">
+              <div class="form-group"><label>Full Name *</label><input type="text" class="form-control" id="custName" placeholder="Your full name"/></div>
+              <div class="form-group"><label>Phone Number *</label><input type="tel" class="form-control" id="custPhone" placeholder="+91 98765 43210"/></div>
+            </div>
+            <div class="form-group"><label>Special Instructions (optional)</label><textarea class="form-control" id="custNotes" placeholder="Allergies, spice level, special requests…" rows="2"></textarea></div>
+            <div id="formMsg"></div>
+          </div>
+        </div>
+
+        <!-- ORDER ACTIONS -->
+        <div class="order-card">
+          <div class="order-card-head"><h3>📤 Place Your Order</h3></div>
+          <div class="order-card-body">
+            <p style="font-size:.84rem;color:var(--text-lt);margin-bottom:20px">Choose how you'd like to send your order:</p>
+            <button class="wa-btn" onclick="orderViaWhatsApp()">
+              <span style="font-size:1.4rem">💬</span>
+              Order via WhatsApp
+              <span style="font-size:.75rem;opacity:.85">Opens WhatsApp with order details</span>
+            </button>
+            <a class="em-btn" id="emailBtn" href="#" onclick="orderViaEmail()">
+              <span style="font-size:1.4rem">📧</span>
+              Order via Email
+              <span style="font-size:.75rem;opacity:.85">Opens your email app</span>
+            </a>
+            <div style="text-align:center;color:var(--text-lt);font-size:.78rem;margin-top:8px">
+              ℹ️ Our team will confirm your order within 5–10 minutes
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: INVOICE PANEL -->
+      <div>
+        <!-- PRINT BAR -->
+        <div class="print-bar no-print">
+          <button onclick="window.print()">🖨️ Print Invoice</button>
+          <span>A4 size · Use browser print dialog</span>
+          <button onclick="generateInvoicePage()">📄 Full Invoice</button>
+        </div>
+
+        <!-- INVOICE -->
+        <div class="invoice-wrap" id="invoiceWrap">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<nav class="bottom-nav no-print">
+  <a class="bn-item" href="index.html"><div class="bn-icon">🏠</div><div class="bn-label">Home</div></a>
+  <a class="bn-item" href="menu.html"><div class="bn-icon">📋</div><div class="bn-label">Menu</div></a>
+  <a class="bn-item active" href="order.html"><div class="bn-icon">🛒</div><div class="bn-label">Cart</div></a>
+  <a class="bn-item" href="admin.html"><div class="bn-icon">⚙️</div><div class="bn-label">Admin</div></a>
+</nav>
+
+<script src="datastore.js"></script>
+<script src="common.js"></script>
+<script>
+var orderType='dine-in';
+var ORDER_ID = genOrderId();
+
+(async function(){
+  await DataStore.load();
+  const R=DataStore.get('restaurant');
+  document.getElementById('brandName').textContent=R.name||'Flavor Fusion';
+  if(R.logo) document.getElementById('brandLogo').innerHTML='<img src="'+R.logo+'" alt="" />';
+  const ab=document.getElementById('announceBar');
+  if(R.announcement) ab.textContent=R.announcement; else ab.style.display='none';
+
+  const items=Cart.all();
+  if(!items.length){
+    document.getElementById('emptyCart').classList.remove('hidden');
+    document.getElementById('orderWrap').classList.add('hidden');
+    return;
+  }
+
+  renderCartReview();
+  renderInvoice();
+
+  // Live update invoice when fields change
+  ['custName','custPhone','custNotes','deliveryAddr'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.addEventListener('input',renderInvoice);
+  });
+})();
+
+function setOrderType(t){
+  orderType=t;
+  document.querySelectorAll('.ot-tab').forEach(b=>b.classList.toggle('active',b.dataset.type===t));
+  document.getElementById('deliveryFields').style.display=t==='delivery'?'block':'none';
+  renderInvoice();
+}
+
+function renderCartReview(){
+  const items=Cart.all();
+  const R=DataStore.get('restaurant');
+  const el=document.getElementById('cartReview');
+  el.innerHTML=items.map(it=>`
+    <div class="cart-item">
+      <div class="cart-item-img">${it.image?`<img src="${it.image}" alt="${it.name}" />`:'🍽️'}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${it.name}</div>
+        <div class="cart-item-price">${fmt(it.price)} × ${it.qty} = <strong>${fmt(it.price*it.qty)}</strong></div>
+        <div class="qty-ctrl" style="margin-top:8px">
+          <button onclick="upd('${it.id}',-1)">−</button>
+          <span class="qty-num">${it.qty}</span>
+          <button onclick="upd('${it.id}',1)">+</button>
+        </div>
+      </div>
+      <button class="cart-item-remove" onclick="Cart.remove('${it.id}');renderCartReview();renderInvoice()">✕</button>
+    </div>`).join('');
+}
+function upd(id,d){ Cart.update(id,Cart.qty(id)+d); renderCartReview(); renderInvoice(); }
+
+function renderInvoice(){
+  const items=Cart.all();
+  if(!items.length) return;
+  const R=DataStore.get('restaurant');
+  const name=document.getElementById('custName')? document.getElementById('custName').value.trim():'';
+  const phone=document.getElementById('custPhone')? document.getElementById('custPhone').value.trim():'';
+  const notes=document.getElementById('custNotes')? document.getElementById('custNotes').value.trim():'';
+  const addr=document.getElementById('deliveryAddr')? document.getElementById('deliveryAddr').value.trim():'';
+  const sub=Cart.subtotal();
+  const gst=Number(R.gst||5);
+  const tax=sub*(gst/100);
+  const total=sub+tax;
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  const timeStr=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+
+  document.getElementById('invoiceWrap').innerHTML=`
+    <div class="inv-head">
+      <div class="inv-logo">${R.logo?`<img src="${R.logo}" style="width:48px;height:48px;border-radius:10px;object-fit:cover;vertical-align:middle" alt="" />`:'🍽️'}</div>
+      <div class="inv-brand">${R.name||'Flavor Fusion'}</div>
+      <div class="inv-addr">${R.address||''}</div>
+      <div class="inv-addr" style="margin-top:4px">📞 ${R.phone||''} &nbsp;|&nbsp; 📧 ${R.email||''}</div>
+      <div class="inv-badge">Tax Invoice</div>
+    </div>
+    <div class="inv-body">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-lt);margin-bottom:3px">Order ID</div>
+          <div style="font-size:1rem;font-weight:800;color:var(--red)">#${ORDER_ID}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-lt);margin-bottom:3px">Date & Time</div>
+          <div style="font-size:.85rem;font-weight:600">${dateStr}, ${timeStr}</div>
+        </div>
+      </div>
+      <div class="inv-meta-grid">
+        <div class="inv-meta-item"><div class="lbl">Customer Name</div><div class="val">${name||'—'}</div></div>
+        <div class="inv-meta-item"><div class="lbl">Phone</div><div class="val">${phone||'—'}</div></div>
+        <div class="inv-meta-item"><div class="lbl">Order Type</div><div class="val">${orderType.charAt(0).toUpperCase()+orderType.slice(1)}</div></div>
+        <div class="inv-meta-item"><div class="lbl">Restaurant Hours</div><div class="val">${R.openHours||'—'}</div></div>
+      </div>
+      ${addr?`<div style="background:var(--bg);border-radius:var(--rad-sm);padding:10px 14px;margin-bottom:16px;font-size:.84rem"><strong>📍 Delivery Address:</strong> ${addr}</div>`:''}
+      <table class="inv-table">
+        <thead><tr>
+          <th>#</th><th>Item</th><th>Type</th><th style="text-align:right">Price</th>
+          <th style="text-align:center">Qty</th><th style="text-align:right">Amount</th>
+        </tr></thead>
+        <tbody>
+          ${items.map((it,i)=>`<tr>
+            <td style="color:var(--text-lt)">${i+1}</td>
+            <td style="font-weight:700">${it.name}</td>
+            <td><span style="width:14px;height:14px;border-radius:3px;border:2px solid ${it.isVeg?'#27AE60':'#C0392B'};display:inline-flex;align-items:center;justify-content:center"><span style="width:6px;height:6px;border-radius:50%;background:${it.isVeg?'#27AE60':'#C0392B'};display:block"></span></span></td>
+            <td style="text-align:right">${fmt(it.price)}</td>
+            <td style="text-align:center;font-weight:700">${it.qty}</td>
+            <td style="text-align:right;font-weight:700;color:var(--red)">${fmt(it.price*it.qty)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+      <div class="inv-summary">
+        <div class="inv-row"><span>Subtotal</span><span>${fmt(sub)}</span></div>
+        <div class="inv-row"><span>CGST (${gst/2}%)</span><span>${fmt(tax/2)}</span></div>
+        <div class="inv-row"><span>SGST (${gst/2}%)</span><span>${fmt(tax/2)}</span></div>
+        <div class="inv-row total-row"><span>Grand Total</span><span>${fmt(total)}</span></div>
+      </div>
+      ${notes?`<div class="alert alert-info" style="font-size:.82rem"><strong>📝 Instructions:</strong> ${notes}</div>`:''}
+      ${R.upiId?`<div style="text-align:center;padding:12px;background:var(--bg);border-radius:var(--rad-sm);font-size:.8rem"><strong>UPI Payment:</strong> ${R.upiId}</div>`:''}
+    </div>
+    <div class="inv-footer">
+      <div style="margin-bottom:8px">Thank you for choosing ${R.name||'Flavor Fusion'}! 🙏</div>
+      <div>${R.address||''}</div>
+      <div style="margin-top:8px">This is a computer-generated invoice.</div>
+    </div>`;
+}
+
+// VALIDATE
+function validateForm(){
+  const name=document.getElementById('custName').value.trim();
+  const phone=document.getElementById('custPhone').value.trim();
+  if(!name){toast('Please enter your name.','danger');document.getElementById('custName').focus();return false;}
+  if(!phone){toast('Please enter your phone number.','danger');document.getElementById('custPhone').focus();return false;}
+  if(orderType==='delivery'&&!document.getElementById('deliveryAddr').value.trim()){toast('Please enter delivery address.','danger');document.getElementById('deliveryAddr').focus();return false;}
+  return true;
+}
+
+// FORMAT ORDER TEXT
+function buildOrderText(){
+  const items=Cart.all();
+  const R=DataStore.get('restaurant');
+  const name=document.getElementById('custName').value.trim();
+  const phone=document.getElementById('custPhone').value.trim();
+  const notes=document.getElementById('custNotes').value.trim();
+  const addr=document.getElementById('deliveryAddr').value.trim();
+  const sub=Cart.subtotal();
+  const gst=Number(R.gst||5);
+  const tax=sub*(gst/100);
+  const total=sub+tax;
+  const now=new Date().toLocaleString('en-IN');
+  const lines=[
+    `🍽️ *New Order – ${R.name||'Flavor Fusion'}*`,
+    `📍 ${R.address||'Patiala'}`,
+    ``,
+    `*Order #${ORDER_ID}*`,
+    `📅 ${now}`,
+    ``,
+    `*Customer Details:*`,
+    `👤 Name: ${name}`,
+    `📞 Phone: ${phone}`,
+    `📦 Order Type: ${orderType.charAt(0).toUpperCase()+orderType.slice(1)}`,
+    addr?`📍 Address: ${addr}`:'',
+    ``,
+    `*Order Items:*`,
+    ...items.map((it,i)=>`${i+1}️⃣ ${it.name} × ${it.qty} — ${R.currency||'₹'}${(it.price*it.qty).toFixed(0)}`),
+    ``,
+    `─────────────────`,
+    `Subtotal: ${fmt(sub)}`,
+    `GST (${gst}%): ${fmt(tax)}`,
+    `*Grand Total: ${fmt(total)}*`,
+    `─────────────────`,
+    notes?`📝 Notes: ${notes}`:'',
+    ``,
+    `Please confirm this order. Thank you! 🙏`
+  ].filter(x=>x!==undefined&&x!==null);
+  return lines.join('\n');
+}
+
+function orderViaWhatsApp(){
+  if(!validateForm()) return;
+  const R=DataStore.get('restaurant');
+  const wa=R.whatsapp||'';
+  if(!wa){toast('WhatsApp number not set by admin.','warning');return;}
+  const text=buildOrderText();
+  const url=`https://wa.me/${wa}?text=${encodeURIComponent(text)}`;
+  window.open(url,'_blank');
+  renderInvoice();
+  toast('Opening WhatsApp…','success');
+}
+
+function orderViaEmail(){
+  if(!validateForm()) return false;
+  const R=DataStore.get('restaurant');
+  const email=R.email||'';
+  const items=Cart.all();
+  const sub=Cart.subtotal();
+  const gst=Number(R.gst||5);
+  const tax=sub*(gst/100);
+  const total=sub+tax;
+  const name=document.getElementById('custName').value.trim();
+  const subject=encodeURIComponent(`New Order #${ORDER_ID} – ${R.name||'Flavor Fusion'}`);
+  const body=encodeURIComponent(buildOrderText());
+  const url=`mailto:${email}?subject=${subject}&body=${body}`;
+  location.href=url;
+  renderInvoice();
+  return false;
+}
+
+function generateInvoicePage(){
+  window.print();
+}
+</script>
+</body>
+</html>

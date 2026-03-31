@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>Flavor Fusion – Patiala</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT -->
+<div class="announce-bar" id="announceBar"></div>
+
+<!-- APP BAR -->
+<header class="app-bar">
+  <div class="app-bar-inner">
+    <a class="brand" href="index.html" id="brandLink">
+      <div class="brand-logo" id="brandLogo">🍽️</div>
+      <span class="brand-name" id="brandName">Flavor Fusion</span>
+    </a>
+    <div class="app-bar-spacer"></div>
+    <nav class="app-bar-nav" id="topNav">
+      <a href="index.html" class="active">🏠 Home</a>
+      <a href="menu.html">📋 Menu</a>
+      <a href="order.html">🛒 Cart</a>
+      <a href="admin.html">🔐 Admin</a>
+    </nav>
+    <a href="order.html" class="cart-btn desktop-cart" id="cartBtn">
+      🛒 Cart
+      <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+    </a>
+    <button class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="heroSection">
+  <div class="hero-pattern"></div>
+  <div class="hero-inner container">
+    <div>
+      <div class="hero-tag">📍 Patiala, Punjab</div>
+      <h1 id="heroTitle">Where <em>Punjab</em><br>Meets the World</h1>
+      <p class="hero-sub" id="heroSub">Loading...</p>
+      <div class="hero-actions">
+        <a href="menu.html" class="btn btn-white btn-lg">📋 View Full Menu</a>
+        <a href="menu.html" class="btn btn-amber btn-lg">Order Now →</a>
+      </div>
+      <div class="hero-stats" id="heroStats"></div>
+    </div>
+    <div class="hero-art">🍛</div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>Explore by Category</h2>
+      <div class="divider-line"><span>✦</span></div>
+      <p>From Punjabi classics to global favorites</p>
+    </div>
+    <div class="cat-cards-grid" id="catGrid"></div>
+  </div>
+</section>
+
+<!-- FEATURED ITEMS -->
+<section class="section" style="background:var(--surface2);padding:48px 0">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px;flex-wrap:wrap;gap:12px">
+      <div class="section-head" style="margin:0">
+        <h2>⭐ Featured Items</h2>
+        <div class="divider-line"><span>✦</span></div>
+      </div>
+      <a href="menu.html" class="btn btn-outline btn-sm">View All →</a>
+    </div>
+    <div class="feat-scroll" id="featScroll"></div>
+  </div>
+</section>
+
+<!-- BESTSELLERS -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>🏆 Bestsellers</h2>
+      <div class="divider-line"><span>✦</span></div>
+      <p>Our guests keep coming back for these</p>
+    </div>
+    <div class="menu-grid" id="bestGrid"></div>
+    <div style="text-align:center;margin-top:32px">
+      <a href="menu.html" class="btn btn-red btn-lg">See Full Menu →</a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="section" style="background:linear-gradient(135deg,var(--red-dk),var(--red));padding:64px 0">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:40px">
+      <h2 style="font-family:'Italiana',serif;font-size:clamp(1.8rem,3vw,2.6rem);color:#fff">Why Choose Flavor Fusion?</h2>
+      <div class="divider-line" style="justify-content:center"><span>✦</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px">
+      <div style="text-align:center;padding:28px 20px;background:rgba(255,255,255,.08);border-radius:var(--rad-lg);border:1px solid rgba(255,255,255,.15)">
+        <div style="font-size:2.8rem;margin-bottom:12px">🧑‍🍳</div>
+        <h3 style="font-family:'Italiana',serif;font-size:1.2rem;color:#fff;margin-bottom:6px">Master Chefs</h3>
+        <p style="font-size:.82rem;color:rgba(255,255,255,.7)">Trained in traditional Punjabi & fusion cuisines</p>
+      </div>
+      <div style="text-align:center;padding:28px 20px;background:rgba(255,255,255,.08);border-radius:var(--rad-lg);border:1px solid rgba(255,255,255,.15)">
+        <div style="font-size:2.8rem;margin-bottom:12px">🌿</div>
+        <h3 style="font-family:'Italiana',serif;font-size:1.2rem;color:#fff;margin-bottom:6px">Fresh Ingredients</h3>
+        <p style="font-size:.82rem;color:rgba(255,255,255,.7)">Farm-to-table freshness in every dish</p>
+      </div>
+      <div style="text-align:center;padding:28px 20px;background:rgba(255,255,255,.08);border-radius:var(--rad-lg);border:1px solid rgba(255,255,255,.15)">
+        <div style="font-size:2.8rem;margin-bottom:12px">⚡</div>
+        <h3 style="font-family:'Italiana',serif;font-size:1.2rem;color:#fff;margin-bottom:6px">Fast Delivery</h3>
+        <p style="font-size:.82rem;color:rgba(255,255,255,.7)">Hot food delivered within 30–45 minutes</p>
+      </div>
+      <div style="text-align:center;padding:28px 20px;background:rgba(255,255,255,.08);border-radius:var(--rad-lg);border:1px solid rgba(255,255,255,.15)">
+        <div style="font-size:2.8rem;margin-bottom:12px">💎</div>
+        <h3 style="font-family:'Italiana',serif;font-size:1.2rem;color:#fff;margin-bottom:6px">Premium Quality</h3>
+        <p style="font-size:.82rem;color:rgba(255,255,255,.7)">Restaurant-grade quality at your doorstep</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-top">
+    <div class="container">
+      <div class="foot-grid">
+        <div>
+          <div class="foot-brand" id="footBrand">🍽️ Flavor Fusion</div>
+          <p id="footAddr" style="font-size:.8rem;color:rgba(255,255,255,.5);line-height:1.8;margin-top:8px"></p>
+        </div>
+        <div class="foot-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="menu.html">Full Menu</a></li>
+            <li><a href="order.html">My Cart</a></li>
+            <li><a href="admin.html">Admin</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h4>Categories</h4>
+          <ul id="footCats"></ul>
+        </div>
+        <div class="foot-col">
+          <h4>Contact</h4>
+          <p id="footContact" style="font-size:.8rem;color:rgba(255,255,255,.5);line-height:1.9"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bar"><div class="container">© 2024 Flavor Fusion, Patiala. All Rights Reserved. | Crafted with ❤️ for food lovers</div></div>
+</footer>
+
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav">
+  <a class="bn-item active" href="index.html"><div class="bn-icon">🏠</div><div class="bn-label">Home</div></a>
+  <a class="bn-item" href="menu.html"><div class="bn-icon">📋</div><div class="bn-label">Menu</div></a>
+  <a class="bn-item" href="order.html" id="bnCart"><div class="bn-icon">🛒</div><div class="bn-label">Cart</div><div class="bn-badge" id="bnBadge" style="display:none">0</div></a>
+  <a class="bn-item" href="admin.html"><div class="bn-icon">⚙️</div><div class="bn-label">Admin</div></a>
+</nav>
+
+<!-- FAB cart -->
+<button class="fab-cart" id="fabCart" onclick="location.href='order.html'" style="display:none">
+  🛒 View Cart <span class="fab-count" id="fabCount">0</span>
+</button>
+
+<script src="datastore.js"></script>
+<script src="common.js"></script>
+<script>
+(async function(){
+  await DataStore.load();
+  const R  = DataStore.get('restaurant');
+  const cats = DataStore.get('categories').slice().sort((a,b)=>a.order-b.order);
+  const items = DataStore.get('menuItems');
+
+  // App bar branding
+  document.getElementById('brandName').textContent = R.name||'Flavor Fusion';
+  if(R.logo){ const el=document.getElementById('brandLogo'); el.innerHTML='<img src="'+R.logo+'" alt="logo" />'; }
+  document.getElementById('footBrand').textContent = '🍽️ '+R.name;
+  document.getElementById('announceBar').textContent = R.announcement||'';
+  if(!R.announcement) document.getElementById('announceBar').style.display='none';
+
+  // Hero
+  document.getElementById('heroTitle').innerHTML = (R.tagline||'').replace(' Meets ',' <em>Meets</em> ').replace('Punjab','<em>Punjab</em>')||'<em>Punjab</em><br>Meets the World';
+  document.getElementById('heroSub').textContent = R.heroTagline||'Handcrafted Flavors. Straight from the Heart of Patiala.';
+
+  document.getElementById('heroStats').innerHTML =
+    '<div class="hero-stat"><div class="num">'+items.length+'</div><div class="lbl">Menu Items</div></div>'+
+    '<div class="hero-stat"><div class="num">'+cats.length+'</div><div class="lbl">Categories</div></div>'+
+    '<div class="hero-stat"><div class="num">4.8★</div><div class="lbl">Rating</div></div>'+
+    '<div class="hero-stat"><div class="num">Fast</div><div class="lbl">Delivery</div></div>';
+
+  // Footer contact
+  document.getElementById('footAddr').innerHTML =
+    (R.address||'')+'\n'+R.openHours;
+  document.getElementById('footContact').innerHTML =
+    '📞 '+(R.phone||'')+'\n'+'📧 '+(R.email||'')+'\n'+'⏰ '+(R.openHours||'');
+
+  // Categories
+  const catGrid = document.getElementById('catGrid');
+  if(!cats.length){ catGrid.innerHTML='<p style="color:var(--text-lt)">No categories yet.</p>'; }
+  else{
+    catGrid.innerHTML = cats.map(c=>`
+      <a href="menu.html#${c.id}" class="cat-card">
+        <div class="cat-icon">${c.icon||'🍽️'}</div>
+        <div class="cat-name">${c.name}</div>
+      </a>`).join('');
+    document.getElementById('footCats').innerHTML = cats.map(c=>`<li><a href="menu.html#${c.id}">${c.name}</a></li>`).join('');
+  }
+
+  // Featured items
+  const featured = items.filter(x=>x.isFeatured&&x.isAvailable);
+  const fs = document.getElementById('featScroll');
+  if(!featured.length){ fs.innerHTML='<p style="color:var(--text-lt)">No featured items yet.</p>'; }
+  else{
+    fs.innerHTML = featured.map(item=>`
+      <a href="menu.html" class="feat-card" onclick="sessionStorage.setItem('openCat','${item.categoryId}')">
+        <div class="feat-img">
+          ${item.image?`<img src="${item.image}" alt="${item.name}" />`:''}
+          <span style="position:relative;z-index:1${item.image?';display:none':''}">${itemEmoji(item)}</span>
+        </div>
+        <div class="feat-body">
+          <div class="feat-name">${item.name}</div>
+          <div class="feat-price">${fmt(item.price)}</div>
+        </div>
+      </a>`).join('');
+  }
+
+  // Bestsellers
+  const best = items.filter(x=>x.isBestseller&&x.isAvailable).slice(0,6);
+  const bg = document.getElementById('bestGrid');
+  if(!best.length){ bg.innerHTML='<p style="color:var(--text-lt)">No bestsellers yet.</p>'; }
+  else{ bg.innerHTML = best.map(renderCard).join(''); }
+
+  // Cart badges
+  Cart.onChange(updateCartBadges);
+  updateCartBadges();
+})();
+
+function renderCard(item){
+  const q = Cart.qty(item.id);
+  return `
+  <div class="menu-card fade-in" id="card_${item.id}">
+    <div class="menu-card-img">
+      ${item.image?`<img src="${item.image}" alt="${item.name}" />`:''}
+      <span class="img-emoji"${item.image?' style="display:none"':''}>${itemEmoji(item)}</span>
+      <div class="menu-card-badges">
+        ${item.isBestseller?'<span class="badge-bestseller">Bestseller</span>':''}
+        ${item.isFeatured?'<span class="badge-featured">Featured</span>':''}
+      </div>
+      <div class="veg-dot ${item.isVeg?'veg':'nonveg'}"></div>
+    </div>
+    <div class="menu-card-body">
+      <div class="menu-card-name">${item.name}</div>
+      <div class="menu-card-desc">${item.description||''}</div>
+    </div>
+    <div class="menu-card-foot">
+      <div class="menu-card-price">${fmt(item.price)}</div>
+      <div id="ctrl_${item.id}">
+        ${q>0
+          ? `<div class="qty-ctrl"><button onclick="changeQty('${item.id}',-1)">−</button><span class="qty-num">${q}</span><button onclick="changeQty('${item.id}',1)">+</button></div>`
+          : `<button class="add-btn" onclick="addToCart('${item.id}')">+ Add</button>`
+        }
+      </div>
+    </div>
+    ${!item.isAvailable?'<div class="unavailable-overlay"><span>Unavailable</span></div>':''}
+  </div>`;
+}
+
+function addToCart(id){
+  const item = DataStore.get('menuItems').find(x=>x.id===id);
+  if(!item||!item.isAvailable) return;
+  Cart.add(item);
+  refreshCtrl(id);
+  toast(item.name+' added to cart!','success');
+}
+function changeQty(id,delta){
+  const q = Cart.qty(id)+delta;
+  Cart.update(id,q);
+  refreshCtrl(id);
+}
+function refreshCtrl(id){
+  const q = Cart.qty(id);
+  const el = document.getElementById('ctrl_'+id);
+  if(!el) return;
+  el.innerHTML = q>0
+    ? `<div class="qty-ctrl"><button onclick="changeQty('${id}',-1)">−</button><span class="qty-num">${q}</span><button onclick="changeQty('${id}',1)">+</button></div>`
+    : `<button class="add-btn" onclick="addToCart('${id}')">+ Add</button>`;
+  updateCartBadges();
+}
+</script>
+</body>
+</html>
