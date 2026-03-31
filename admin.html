@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>Admin – Flavor Fusion</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    body{background:#f0f2f5}
+    .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+    .toggle-row:last-child{border:none}
+    .toggle-row label{font-size:.85rem;font-weight:600;color:var(--text)}
+    .switch{position:relative;display:inline-block;width:44px;height:24px}
+    .switch input{opacity:0;width:0;height:0}
+    .slider{position:absolute;cursor:pointer;inset:0;background:#ccc;border-radius:24px;transition:.3s}
+    .slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+    input:checked+.slider{background:var(--green)}
+    input:checked+.slider::before{transform:translateX(20px)}
+    .color-circle{width:18px;height:18px;border-radius:50%;display:inline-block;vertical-align:middle;margin-right:4px;border:2px solid rgba(0,0,0,.1)}
+    .steps-card{background:var(--gold);background:linear-gradient(135deg,var(--amber),var(--amber-lt));border-radius:var(--rad);padding:18px 22px;margin-bottom:20px}
+    .steps-card h4{font-size:.88rem;font-weight:800;color:#fff;margin-bottom:10px}
+    .steps-list{list-style:none;counter-reset:s}
+    .steps-list li{counter-increment:s;display:flex;gap:10px;align-items:flex-start;font-size:.8rem;color:rgba(255,255,255,.9);margin-bottom:8px;line-height:1.5}
+    .steps-list li::before{content:counter(s);background:rgba(255,255,255,.3);color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0;margin-top:1px}
+  </style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="loginScreen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(140deg,var(--red-dk),var(--red),var(--amber));padding:24px">
+  <div style="background:#fff;border-radius:var(--rad-xl);box-shadow:var(--shadow-lg);padding:44px;width:100%;max-width:400px">
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="font-size:3.5rem;margin-bottom:10px">🍽️</div>
+      <div style="font-family:'Italiana',serif;font-size:2rem;color:var(--red);margin-bottom:4px">Admin Portal</div>
+      <div style="font-size:.8rem;color:var(--text-lt)">Flavor Fusion, Patiala</div>
+    </div>
+    <div id="loginErr"></div>
+    <div class="form-group"><label>Username</label><input type="text" class="form-control" id="lUser" value="admin"/></div>
+    <div class="form-group"><label>Password</label><input type="password" class="form-control" id="lPass" placeholder="Password"/>
+      <div class="form-hint">Default: <strong>fusion@admin</strong></div></div>
+    <button class="btn btn-red btn-block" style="margin-top:6px" onclick="doLogin()">🔓 Login</button>
+    <div style="margin-top:16px;text-align:center"><a href="index.html" style="color:var(--text-lt);font-size:.8rem;text-decoration:none">← Back to Website</a></div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN PANEL ═══ -->
+<div id="adminPanel" class="hidden">
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sb">
+    <div class="sb-logo">
+      <div class="sb-logo-icon" id="sbLogoIcon">🍽️</div>
+      <div><div class="sb-logo-name" id="sbLogoName">Flavor Fusion</div><div class="sb-logo-sub">Admin Dashboard</div></div>
+    </div>
+    <nav class="sb-nav" id="sbNav">
+      <div class="sb-sec">MAIN</div>
+      <div class="sb-item active" data-p="dashboard"><span class="si">📊</span>Dashboard</div>
+      <div class="sb-sep"></div>
+      <div class="sb-sec">MANAGE</div>
+      <div class="sb-item" data-p="menu"><span class="si">🍛</span>Menu Items</div>
+      <div class="sb-item" data-p="categories"><span class="si">📂</span>Categories</div>
+      <div class="sb-sep"></div>
+      <div class="sb-sec">SETTINGS</div>
+      <div class="sb-item" data-p="restaurant"><span class="si">⚙️</span>Restaurant Info</div>
+      <div class="sb-item" data-p="publish"><span class="si">🚀</span>Publish Data</div>
+      <div class="sb-item" data-p="settings"><span class="si">🔒</span>Account</div>
+    </nav>
+    <div class="sb-foot"><button class="btn btn-ghost btn-sm btn-block" style="color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.15)" onclick="doLogout()">🚪 Logout</button></div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div class="admin-bar">
+      <h1 id="panelTitle">📊 Dashboard</h1>
+      <div style="display:flex;gap:12px;align-items:center">
+        <a href="menu.html" target="_blank" style="font-size:.8rem;color:var(--red);text-decoration:none;font-weight:600">🌐 View Menu</a>
+        <a href="index.html" target="_blank" style="font-size:.8rem;color:var(--text-lt);text-decoration:none">🏠 Website</a>
+      </div>
+    </div>
+    <div class="admin-body">
+
+      <!-- ═══ DASHBOARD ═══ -->
+      <div class="a-panel active" id="panel-dashboard">
+        <div class="publish-banner">
+          <div class="pub-icon">🚀</div>
+          <div class="pub-text">
+            <h3>Publish After Every Change!</h3>
+            <p>After adding items, categories or changing settings → click <strong>Publish Data</strong> → download <code>data.json</code> → upload to GitHub repo → all customers see updates.</p>
+          </div>
+          <div class="pub-actions"><button class="pub-btn" onclick="switchPanel('publish')">🚀 Publish Now →</button></div>
+        </div>
+        <div class="dash-stats" id="dashStats"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" id="dashGrid">
+          <div class="a-card"><h3>🚀 Quick Actions</h3>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <button class="btn btn-red" onclick="switchPanel('menu')">➕ Add Menu Item</button>
+              <button class="btn btn-amber" onclick="switchPanel('categories')">📂 Manage Categories</button>
+              <button class="btn btn-outline" onclick="switchPanel('restaurant')">⚙️ Restaurant Settings</button>
+              <button class="pub-btn" style="background:var(--amber);color:#fff;justify-content:center;border-radius:var(--rad)" onclick="switchPanel('publish')">🚀 Publish Data</button>
+            </div>
+          </div>
+          <div class="a-card"><h3>📋 Recent Items</h3><div id="dashItems"></div></div>
+        </div>
+      </div>
+
+      <!-- ═══ MENU ITEMS ═══ -->
+      <div class="a-panel" id="panel-menu">
+        <div class="a-card">
+          <h3 id="menuFormTitle">➕ Add Menu Item</h3>
+          <input type="hidden" id="editItemId"/>
+          <div class="form-row">
+            <div class="form-group"><label>Item Name *</label><input type="text" class="form-control" id="iName" placeholder="e.g. Butter Chicken"/></div>
+            <div class="form-group"><label>Category *</label><select class="form-control" id="iCat"><option value="">Select category…</option></select></div>
+          </div>
+          <div class="form-group"><label>Short Description</label><textarea class="form-control" id="iDesc" placeholder="Briefly describe this dish…" rows="2"></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label>Price (₹) *</label><input type="number" class="form-control" id="iPrice" placeholder="299" min="0"/></div>
+            <div class="form-group"><label>Type</label>
+              <select class="form-control" id="iVeg"><option value="true">🟢 Vegetarian</option><option value="false">🔴 Non-Vegetarian</option></select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Item Image (optional)</label>
+            <div class="img-upload-zone" id="imgZone" onclick="document.getElementById('iImg').click()" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="handleImgDrop(event)">
+              <div class="uz-icon">🖼️</div>
+              <h4>Click or drag image here</h4>
+              <p>JPG/PNG · Will be auto-resized to fit</p>
+              <input type="file" id="iImg" accept="image/*" class="hidden" onchange="handleImgFile(event)"/>
+            </div>
+            <img id="iImgPreview" class="img-preview" alt="preview"/>
+            <button id="iImgClear" class="btn btn-ghost btn-sm hidden" style="margin-top:6px" onclick="clearImg()">✕ Remove Image</button>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <div style="display:flex;gap:16px;align-items:center;flex:1">
+              <label style="display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;cursor:pointer">
+                <input type="checkbox" id="iFeatured"/> ⭐ Featured
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;cursor:pointer">
+                <input type="checkbox" id="iBestseller"/> 🏆 Bestseller
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;cursor:pointer">
+                <input type="checkbox" id="iAvail" checked/> ✅ Available
+              </label>
+            </div>
+          </div>
+          <div id="itemMsg" class="mt-sm"></div>
+          <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+            <button class="btn btn-red" onclick="saveItem()">💾 Save Item</button>
+            <button class="btn btn-ghost" onclick="resetItemForm()">✕ Cancel</button>
+          </div>
+        </div>
+
+        <!-- ITEM LIST -->
+        <div class="a-card">
+          <h3>🍛 All Menu Items (<span id="itemCount">0</span>)</h3>
+          <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+            <input type="text" class="form-control" id="itemSearch" placeholder="Search items…" style="max-width:260px" oninput="renderItemList()"/>
+            <select class="form-control" id="itemCatFilter" style="max-width:180px" onchange="renderItemList()"><option value="">All Categories</option></select>
+          </div>
+          <div id="itemList"></div>
+        </div>
+      </div>
+
+      <!-- ═══ CATEGORIES ═══ -->
+      <div class="a-panel" id="panel-categories">
+        <div class="a-card">
+          <h3 id="catFormTitle">➕ Add Category</h3>
+          <input type="hidden" id="editCatId"/>
+          <div class="form-row">
+            <div class="form-group"><label>Category Name *</label><input type="text" class="form-control" id="cName" placeholder="e.g. Starters"/></div>
+            <div class="form-group"><label>Emoji Icon</label><input type="text" class="form-control" id="cIcon" placeholder="e.g. 🥗" maxlength="4"/></div>
+          </div>
+          <div class="form-group"><label>Display Order (1 = first)</label><input type="number" class="form-control" id="cOrder" placeholder="1" min="1" style="max-width:150px"/></div>
+          <div id="catMsg" class="mt-sm"></div>
+          <div style="display:flex;gap:10px;margin-top:14px">
+            <button class="btn btn-red" onclick="saveCat()">💾 Save Category</button>
+            <button class="btn btn-ghost" onclick="resetCatForm()">✕ Cancel</button>
+          </div>
+        </div>
+        <div class="a-card"><h3>📂 All Categories (<span id="catCount">0</span>)</h3><div id="catList"></div></div>
+      </div>
+
+      <!-- ═══ RESTAURANT SETTINGS ═══ -->
+      <div class="a-panel" id="panel-restaurant">
+        <div class="a-card">
+          <h3>🏪 Restaurant Identity</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Restaurant Name *</label><input type="text" class="form-control" id="rName" placeholder="Flavor Fusion"/></div>
+            <div class="form-group"><label>Tagline</label><input type="text" class="form-control" id="rTagline" placeholder="Where Punjab Meets the World"/></div>
+          </div>
+          <div class="form-group">
+            <label>Restaurant Logo</label>
+            <div class="img-upload-zone" id="logoZone" onclick="document.getElementById('rLogo').click()" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="handleLogoDrop(event)">
+              <div class="uz-icon">🏪</div><h4>Upload Logo</h4><p>PNG/JPG · Recommended 200×200px</p>
+              <input type="file" id="rLogo" accept="image/*" class="hidden" onchange="handleLogoFile(event)"/>
+            </div>
+            <img id="rLogoPreview" class="img-preview" alt="logo preview"/>
+            <button id="rLogoClear" class="btn btn-ghost btn-sm hidden" style="margin-top:6px" onclick="clearLogo()">✕ Remove Logo</button>
+          </div>
+          <div class="form-group"><label>Hero Tagline (homepage main text)</label><input type="text" class="form-control" id="rHeroTagline" placeholder="Handcrafted Flavors. Straight from the Heart of Patiala."/></div>
+          <div class="form-group"><label>Announcement Bar (top banner)</label><input type="text" class="form-control" id="rAnnounce" placeholder="🎉 Free delivery on orders above ₹500!"/></div>
+        </div>
+        <div class="a-card">
+          <h3>📞 Contact & Hours</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Address</label><input type="text" class="form-control" id="rAddr" placeholder="22, Model Town, Patiala"/></div>
+            <div class="form-group"><label>Phone Number</label><input type="text" class="form-control" id="rPhone" placeholder="+91 98765 43210"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>WhatsApp Number <small style="color:var(--text-lt)">(with country code, no +)</small></label>
+              <input type="text" class="form-control" id="rWA" placeholder="919876543210"/>
+            </div>
+            <div class="form-group"><label>Email Address</label><input type="email" class="form-control" id="rEmail" placeholder="order@restaurant.in"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Opening Hours</label><input type="text" class="form-control" id="rHours" placeholder="Mon–Sun: 11:00 AM – 11:00 PM"/></div>
+            <div class="form-group"><label>UPI ID (for invoice)</label><input type="text" class="form-control" id="rUPI" placeholder="restaurant@upi"/></div>
+          </div>
+          <div class="form-group" style="max-width:220px"><label>GST Rate (%)</label><input type="number" class="form-control" id="rGST" placeholder="5" min="0" max="28"/></div>
+        </div>
+        <div id="restMsg"></div>
+        <button class="btn btn-red" onclick="saveRestaurant()">💾 Save All Settings</button>
+      </div>
+
+      <!-- ═══ PUBLISH ═══ -->
+      <div class="a-panel" id="panel-publish">
+        <div class="a-card">
+          <h3>🚀 Publish Data to Website</h3>
+          <p style="font-size:.88rem;color:var(--text-md);margin-bottom:18px;line-height:1.7">
+            All your changes (menu items, categories, restaurant info) are stored in your browser. To make them visible to <strong>all customers on any device</strong>, you must publish by uploading <code>data.json</code> to GitHub.
+          </p>
+          <div class="steps-card">
+            <h4>📋 How to Publish (repeat every time you make changes)</h4>
+            <ol class="steps-list">
+              <li>Click <strong>"📥 Download data.json"</strong> below</li>
+              <li>Open your <strong>GitHub repository</strong> in browser</li>
+              <li>Find <code>data.json</code> → click it → click ✏️ Edit</li>
+              <li>Select all → Delete → Paste content from downloaded file</li>
+              <li>Click <strong>"Commit changes"</strong> — done in 1–2 minutes ✅</li>
+            </ol>
+          </div>
+          <div style="background:var(--info-bg);border-radius:var(--rad-sm);padding:14px;margin-bottom:20px;border-left:4px solid var(--amber);font-size:.82rem">
+            <strong>💡 Faster way:</strong> Drag the downloaded <code>data.json</code> file onto your GitHub repo page → it will prompt to commit → done!
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <button class="pub-btn" style="background:var(--red);color:#fff;padding:14px 28px;font-size:.9rem;border-radius:var(--rad)" onclick="publishData()">📥 Download data.json</button>
+            <button class="btn btn-outline btn-sm" onclick="DataStore.exportBackup();toast('Backup exported!','success')">📤 Export Backup</button>
+            <button class="btn btn-ghost btn-sm" onclick="importPrompt()">📥 Import Backup</button>
+          </div>
+          <div id="publishMsg" class="mt-md"></div>
+        </div>
+        <div class="a-card">
+          <h3>📊 Data Summary</h3>
+          <div id="pubSummary"></div>
+        </div>
+      </div>
+
+      <!-- ═══ ACCOUNT/SETTINGS ═══ -->
+      <div class="a-panel" id="panel-settings">
+        <div class="a-card" style="max-width:480px">
+          <h3>🔒 Change Password</h3>
+          <div class="form-group"><label>Current Password</label><input type="password" class="form-control" id="sCur"/></div>
+          <div class="form-group"><label>New Password (min 6)</label><input type="password" class="form-control" id="sNew"/></div>
+          <div class="form-group"><label>Confirm New Password</label><input type="password" class="form-control" id="sConf"/></div>
+          <div id="sMsg"></div>
+          <button class="btn btn-red" onclick="changePass()">🔐 Update Password</button>
+        </div>
+        <div class="a-card" style="max-width:480px">
+          <h3>⚠️ Danger Zone</h3>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <button class="btn btn-danger btn-sm" onclick="clearAll('menuItems')">🗑️ Delete All Menu Items</button>
+            <button class="btn btn-danger btn-sm" onclick="clearAll('categories')">🗑️ Delete All Categories</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- admin-body -->
+  </div><!-- admin-main -->
+</div><!-- admin-layout -->
+</div><!-- adminPanel -->
+
+<script src="datastore.js"></script>
+<script src="common.js"></script>
+<script>
+/* ═══ AUTH ═══ */
+var PK='ff_admin_pw';
+function getPass(){ return localStorage.getItem(PK)||'fusion@admin'; }
+function doLogin(){
+  var u=document.getElementById('lUser').value.trim(),p=document.getElementById('lPass').value;
+  if(u==='admin'&&p===getPass()){
+    localStorage.setItem('ff_adminMode','true');
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('adminPanel').classList.remove('hidden');
+    initAdmin();
+  } else { document.getElementById('loginErr').innerHTML='<div class="alert alert-danger">❌ Incorrect credentials.</div>'; }
+}
+document.getElementById('lPass').addEventListener('keyup',function(e){if(e.key==='Enter')doLogin();});
+function doLogout(){ localStorage.removeItem('ff_adminMode'); document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('loginScreen').style.display=''; document.getElementById('lPass').value=''; }
+
+/* ═══ PANELS ═══ */
+var PT={dashboard:'📊 Dashboard',menu:'🍛 Menu Items',categories:'📂 Categories',restaurant:'⚙️ Restaurant Info',publish:'🚀 Publish Data',settings:'🔒 Account'};
+function switchPanel(id){
+  document.querySelectorAll('.a-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  var si=document.querySelector('[data-p="'+id+'"]');if(si)si.classList.add('active');
+  document.getElementById('panelTitle').textContent=PT[id]||id;
+  if(id==='menu'){populateCatSelect('iCat','');populateItemCatFilter();renderItemList();}
+  if(id==='publish'){loadPubSummary();}
+  if(id==='restaurant'){fillRestaurantForm();}
+  if(id==='dashboard'){loadDash();}
+}
+document.getElementById('sbNav').addEventListener('click',function(e){
+  var item=e.target.closest('.sb-item');if(item&&item.dataset.p)switchPanel(item.dataset.p);
+});
+
+/* ═══ INIT ═══ */
+async function initAdmin(){
+  await DataStore.load();
+  var R=DataStore.get('restaurant');
+  document.getElementById('sbLogoName').textContent=R.name||'Flavor Fusion';
+  if(R.logo) document.getElementById('sbLogoIcon').innerHTML='<img src="'+R.logo+'" style="width:28px;height:28px;border-radius:6px;object-fit:cover" alt=""/>';
+  loadDash(); renderItemList(); renderCatList();
+  if(window.innerWidth<768){ var dg=document.getElementById('dashGrid');if(dg)dg.style.gridTemplateColumns='1fr'; }
+}
+
+/* ═══ DASHBOARD ═══ */
+function loadDash(){
+  var items=DataStore.get('menuItems'),cats=DataStore.get('categories'),R=DataStore.get('restaurant');
+  var avail=items.filter(x=>x.isAvailable).length, feat=items.filter(x=>x.isFeatured).length;
+  document.getElementById('dashStats').innerHTML=
+    '<div class="dash-stat"><span class="ds-icon">🍛</span><div><div class="ds-val">'+items.length+'</div><div class="ds-lbl">Menu Items</div></div></div>'+
+    '<div class="dash-stat s2"><span class="ds-icon">📂</span><div><div class="ds-val">'+cats.length+'</div><div class="ds-lbl">Categories</div></div></div>'+
+    '<div class="dash-stat s3"><span class="ds-icon">✅</span><div><div class="ds-val">'+avail+'</div><div class="ds-lbl">Available</div></div></div>'+
+    '<div class="dash-stat s4"><span class="ds-icon">⭐</span><div><div class="ds-val">'+feat+'</div><div class="ds-lbl">Featured</div></div></div>';
+  var di=document.getElementById('dashItems');
+  if(!items.length){di.innerHTML='<p style="color:var(--text-lt);font-size:.85rem">No menu items yet.</p>';return;}
+  di.innerHTML=items.slice(-5).reverse().map(function(it){ return '<div class="list-row"><div class="list-row-img">'+(it.image?'<img src="'+it.image+'" alt="" />':'🍽️')+'</div><div class="list-row-info"><div class="list-row-name">'+it.name+'</div><div class="list-row-sub">'+fmt(it.price)+' · '+(it.isVeg?'🟢 Veg':'🔴 Non-Veg')+'</div></div></div>'; }).join('');
+}
+
+/* ═══ IMAGE HANDLING ═══ */
+var currentItemImg=null;
+var imageCleared=false; // true when user explicitly removes image in edit mode
+function handleImgFile(e){ var f=e.target.files[0];if(f)processImg(f); }
+function handleImgDrop(e){ e.preventDefault();document.getElementById('imgZone').classList.remove('over');var f=e.dataTransfer.files[0];if(f)processImg(f); }
+async function processImg(file){
+  try{
+    const base64=await compressImage(file,600,450,0.78);
+    currentItemImg=base64;
+    imageCleared=false;
+    var prev=document.getElementById('iImgPreview');
+    prev.src=base64; prev.style.display='block';
+    document.getElementById('iImgClear').classList.remove('hidden');
+    toast('Image loaded & compressed!','success');
+  }catch(e){toast('Image error: '+e.message,'danger');}
+}
+function clearImg(){ currentItemImg=null; imageCleared=true; document.getElementById('iImgPreview').style.display='none'; document.getElementById('iImgPreview').src=''; document.getElementById('iImgClear').classList.add('hidden'); document.getElementById('iImg').value=''; }
+
+var currentLogoImg=null;
+function handleLogoFile(e){ var f=e.target.files[0];if(f)processLogo(f); }
+function handleLogoDrop(e){ e.preventDefault();document.getElementById('logoZone').classList.remove('over');var f=e.dataTransfer.files[0];if(f)processLogo(f); }
+async function processLogo(file){
+  try{
+    const base64=await compressImage(file,300,300,0.85);
+    currentLogoImg=base64;
+    var prev=document.getElementById('rLogoPreview');
+    prev.src=base64; prev.style.display='block';
+    document.getElementById('rLogoClear').classList.remove('hidden');
+    toast('Logo loaded!','success');
+  }catch(e){toast('Logo error: '+e.message,'danger');}
+}
+function clearLogo(){ currentLogoImg=null; document.getElementById('rLogoPreview').style.display='none'; document.getElementById('rLogoClear').classList.add('hidden'); document.getElementById('rLogo').value=''; }
+
+/* ═══ MENU ITEMS ═══ */
+function populateCatSelect(selId, val){
+  var cats=DataStore.get('categories').slice().sort(function(a,b){return a.order-b.order;});
+  var sel=document.getElementById(selId);
+  if(!sel)return;
+  sel.innerHTML='<option value="">Select category…</option>'+cats.map(function(c){return '<option value="'+c.id+'"'+(val===c.id?' selected':'')+'>'+(c.icon||'')+'  '+c.name+'</option>';}).join('');
+}
+function populateItemCatFilter(){
+  var cats=DataStore.get('categories').slice().sort(function(a,b){return a.order-b.order;});
+  var sel=document.getElementById('itemCatFilter');
+  if(!sel)return;
+  sel.innerHTML='<option value="">All Categories</option>'+cats.map(function(c){return '<option value="'+c.id+'">'+(c.icon||'')+' '+c.name+'</option>';}).join('');
+}
+function saveItem(){
+  var name=document.getElementById('iName').value.trim();
+  var cat=document.getElementById('iCat').value;
+  var price=parseFloat(document.getElementById('iPrice').value);
+  var eid=document.getElementById('editItemId').value;
+  if(!name){showMsg('itemMsg','Item name is required.','danger');return;}
+  if(!cat){showMsg('itemMsg','Please select a category.','danger');return;}
+  if(isNaN(price)||price<0){showMsg('itemMsg','Enter a valid price.','danger');return;}
+  var items=DataStore.get('menuItems');
+  var obj={
+    id:eid||genId('item'),
+    categoryId:cat,
+    name:name,
+    description:document.getElementById('iDesc').value.trim(),
+    price:price,
+    isVeg:document.getElementById('iVeg').value==='true',
+    isFeatured:document.getElementById('iFeatured').checked,
+    isBestseller:document.getElementById('iBestseller').checked,
+    isAvailable:document.getElementById('iAvail').checked,
+    image: imageCleared ? null : (currentItemImg || (eid ? ((items.find(function(x){return x.id===eid;})||{}).image||null) : null))
+  };
+  if(eid){var idx=items.findIndex(function(x){return x.id===eid;});if(idx>=0)items[idx]=obj;else items.push(obj);}
+  else items.push(obj);
+  DataStore.set('menuItems',items);
+  showMsg('itemMsg','✅ Item saved! Don\'t forget to Publish.','success');
+  resetItemForm();renderItemList();loadDash();toast('Item saved!','success');
+}
+function resetItemForm(){
+  document.getElementById('editItemId').value='';
+  document.getElementById('iName').value='';
+  document.getElementById('iDesc').value='';
+  document.getElementById('iPrice').value='';
+  document.getElementById('iVeg').value='true';
+  document.getElementById('iFeatured').checked=false;
+  document.getElementById('iBestseller').checked=false;
+  document.getElementById('iAvail').checked=true;
+  clearImg();
+  imageCleared=false;
+  document.getElementById('menuFormTitle').textContent='➕ Add Menu Item';
+  document.getElementById('itemMsg').innerHTML='';
+  populateCatSelect('iCat','');
+}
+function editItem(id){
+  var items=DataStore.get('menuItems');var it=items.find(function(x){return x.id===id;});if(!it)return;
+  document.getElementById('editItemId').value=it.id;
+  document.getElementById('iName').value=it.name||'';
+  document.getElementById('iDesc').value=it.description||'';
+  document.getElementById('iPrice').value=it.price||'';
+  document.getElementById('iVeg').value=String(it.isVeg);
+  document.getElementById('iFeatured').checked=!!it.isFeatured;
+  document.getElementById('iBestseller').checked=!!it.isBestseller;
+  document.getElementById('iAvail').checked=it.isAvailable!==false;
+  populateCatSelect('iCat',it.categoryId);
+  if(it.image){currentItemImg=it.image;var prev=document.getElementById('iImgPreview');prev.src=it.image;prev.style.display='block';document.getElementById('iImgClear').classList.remove('hidden');}
+  else clearImg();
+  imageCleared=false;
+  document.getElementById('menuFormTitle').textContent='✏️ Edit Item';
+  document.getElementById('panel-menu').querySelector('.a-card').scrollIntoView({behavior:'smooth'});
+}
+function toggleAvail(id,val){
+  var items=DataStore.get('menuItems');var idx=items.findIndex(function(x){return x.id===id;});
+  if(idx<0)return;items[idx].isAvailable=val;DataStore.set('menuItems',items);renderItemList();toast((val?'Available':'Unavailable')+' set.','info');
+}
+function delItem(id){if(!confirmDel('Delete this menu item?'))return;DataStore.del('menuItems',id);renderItemList();loadDash();toast('Deleted.','info');}
+function renderItemList(){
+  var items=DataStore.get('menuItems');
+  var cats=DataStore.get('categories');
+  var q=(document.getElementById('itemSearch')||{value:''}).value.toLowerCase();
+  var catF=(document.getElementById('itemCatFilter')||{value:''}).value;
+  var data=items;
+  if(q)data=data.filter(function(x){return x.name.toLowerCase().includes(q)||(x.description||'').toLowerCase().includes(q);});
+  if(catF)data=data.filter(function(x){return x.categoryId===catF;});
+  document.getElementById('itemCount').textContent=items.length;
+  var el=document.getElementById('itemList');
+  if(!data.length){el.innerHTML='<div class="empty-state"><div class="es-icon">🍛</div><h4>No Items Yet</h4><p>Add your first menu item above.</p></div>';return;}
+  el.innerHTML=data.map(function(it){
+    var cat=cats.find(function(c){return c.id===it.categoryId;});
+    return '<div class="list-row"><div class="list-row-img">'+(it.image?'<img src="'+it.image+'" alt="" />':'🍽️')+'</div><div class="list-row-info"><div class="list-row-name">'+(it.isVeg?'🟢':'🔴')+' '+it.name+'</div><div class="list-row-sub">'+(cat?cat.name:'—')+' · '+fmt(it.price)+(it.isBestseller?' · 🏆':'')+(it.isFeatured?' · ⭐':'')+(it.isAvailable?'':' · <span style="color:var(--red);font-weight:700">Unavailable</span>')+'</div></div><div class="list-row-actions"><button class="btn btn-ghost btn-sm" onclick="toggleAvail(\''+it.id+'\','+(!it.isAvailable)+')">'+(it.isAvailable?'⏸️':'▶️')+'</button><button class="btn btn-outline btn-sm" onclick="editItem(\''+it.id+'\')">✏️</button><button class="btn btn-danger btn-sm" onclick="delItem(\''+it.id+'\')">🗑️</button></div></div>';
+  }).join('');
+}
+
+/* ═══ CATEGORIES ═══ */
+function saveCat(){
+  var name=document.getElementById('cName').value.trim();
+  var eid=document.getElementById('editCatId').value;
+  if(!name){showMsg('catMsg','Category name required.','danger');return;}
+  var cats=DataStore.get('categories');
+  var obj={id:eid||genId('cat'),name:name,icon:document.getElementById('cIcon').value.trim()||'🍽️',order:parseInt(document.getElementById('cOrder').value)||cats.length+1};
+  if(eid){var idx=cats.findIndex(function(x){return x.id===eid;});if(idx>=0)cats[idx]=obj;else cats.push(obj);}
+  else cats.push(obj);
+  DataStore.set('categories',cats);
+  showMsg('catMsg','✅ Category saved! Publish to update.','success');
+  resetCatForm();renderCatList();loadDash();toast('Category saved!','success');
+}
+function resetCatForm(){['editCatId','cName','cIcon','cOrder'].forEach(function(i){document.getElementById(i).value='';});document.getElementById('catFormTitle').textContent='➕ Add Category';document.getElementById('catMsg').innerHTML='';}
+function editCat(id){var c=DataStore.get('categories').find(function(x){return x.id===id;});if(!c)return;document.getElementById('editCatId').value=c.id;document.getElementById('cName').value=c.name||'';document.getElementById('cIcon').value=c.icon||'';document.getElementById('cOrder').value=c.order||'';document.getElementById('catFormTitle').textContent='✏️ Edit Category';document.getElementById('panel-categories').querySelector('.a-card').scrollIntoView({behavior:'smooth'});}
+function delCat(id){if(!confirmDel('Delete this category? Items in it will lose their category.'))return;DataStore.del('categories',id);renderCatList();loadDash();toast('Deleted.','info');}
+function renderCatList(){
+  var cats=DataStore.get('categories').slice().sort(function(a,b){return a.order-b.order;});
+  document.getElementById('catCount').textContent=cats.length;
+  var el=document.getElementById('catList');
+  if(!cats.length){el.innerHTML='<div class="empty-state"><div class="es-icon">📂</div><h4>No Categories Yet</h4></div>';return;}
+  el.innerHTML=cats.map(function(c){return '<div class="list-row"><div class="list-row-img" style="font-size:1.8rem">'+(c.icon||'🍽️')+'</div><div class="list-row-info"><div class="list-row-name">'+c.name+'</div><div class="list-row-sub">Order: '+c.order+'</div></div><div class="list-row-actions"><button class="btn btn-outline btn-sm" onclick="editCat(\''+c.id+'\')">✏️</button><button class="btn btn-danger btn-sm" onclick="delCat(\''+c.id+'\')">🗑️</button></div></div>';}).join('');
+}
+
+/* ═══ RESTAURANT SETTINGS ═══ */
+function fillRestaurantForm(){
+  var R=DataStore.get('restaurant');
+  document.getElementById('rName').value=R.name||'';
+  document.getElementById('rTagline').value=R.tagline||'';
+  document.getElementById('rHeroTagline').value=R.heroTagline||'';
+  document.getElementById('rAnnounce').value=R.announcement||'';
+  document.getElementById('rAddr').value=R.address||'';
+  document.getElementById('rPhone').value=R.phone||'';
+  document.getElementById('rWA').value=R.whatsapp||'';
+  document.getElementById('rEmail').value=R.email||'';
+  document.getElementById('rHours').value=R.openHours||'';
+  document.getElementById('rUPI').value=R.upiId||'';
+  document.getElementById('rGST').value=R.gst||5;
+  if(R.logo){document.getElementById('rLogoPreview').src=R.logo;document.getElementById('rLogoPreview').style.display='block';document.getElementById('rLogoClear').classList.remove('hidden');currentLogoImg=R.logo;}
+}
+function saveRestaurant(){
+  var R={
+    name:document.getElementById('rName').value.trim()||'Flavor Fusion',
+    tagline:document.getElementById('rTagline').value.trim(),
+    logo:currentLogoImg||(DataStore.get('restaurant').logo||null),
+    heroTagline:document.getElementById('rHeroTagline').value.trim(),
+    announcement:document.getElementById('rAnnounce').value.trim(),
+    address:document.getElementById('rAddr').value.trim(),
+    phone:document.getElementById('rPhone').value.trim(),
+    whatsapp:document.getElementById('rWA').value.trim(),
+    email:document.getElementById('rEmail').value.trim(),
+    openHours:document.getElementById('rHours').value.trim(),
+    upiId:document.getElementById('rUPI').value.trim(),
+    gst:parseFloat(document.getElementById('rGST').value)||5,
+    currency:'₹'
+  };
+  DataStore.set('restaurant',R);
+  document.getElementById('sbLogoName').textContent=R.name;
+  if(R.logo) document.getElementById('sbLogoIcon').innerHTML='<img src="'+R.logo+'" style="width:28px;height:28px;border-radius:6px;object-fit:cover" alt=""/>';
+  showMsg('restMsg','✅ Settings saved! Remember to Publish.','success');
+  toast('Settings saved!','success');
+}
+
+/* ═══ PUBLISH ═══ */
+function loadPubSummary(){
+  var items=DataStore.get('menuItems'),cats=DataStore.get('categories'),R=DataStore.get('restaurant');
+  document.getElementById('pubSummary').innerHTML=
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px">'+
+    '<div style="background:var(--surface2);border-radius:var(--rad-sm);padding:14px;text-align:center;border:1px solid var(--border)"><div style="font-family:\'Italiana\',serif;font-size:1.8rem;color:var(--red)">'+items.length+'</div><div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-lt)">Menu Items</div></div>'+
+    '<div style="background:var(--surface2);border-radius:var(--rad-sm);padding:14px;text-align:center;border:1px solid var(--border)"><div style="font-family:\'Italiana\',serif;font-size:1.8rem;color:var(--amber)">'+cats.length+'</div><div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-lt)">Categories</div></div>'+
+    '<div style="background:var(--surface2);border-radius:var(--rad-sm);padding:14px;text-align:center;border:1px solid var(--border)"><div style="font-family:\'Italiana\',serif;font-size:1.8rem;color:var(--green)">'+items.filter(function(x){return x.isAvailable;}).length+'</div><div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-lt)">Available</div></div>'+
+    '</div><p style="margin-top:14px;font-size:.8rem;color:var(--text-lt)">Restaurant: <strong>'+R.name+'</strong> · WA: '+R.whatsapp+'</p>';
+}
+function publishData(){
+  DataStore.publishData();
+  document.getElementById('publishMsg').innerHTML='<div class="alert alert-success">✅ <strong>data.json downloaded!</strong> Upload this file to your GitHub repository root to publish your menu to all customers.</div>';
+  toast('data.json downloaded! Upload to GitHub.','success');
+}
+function importPrompt(){
+  var inp=document.createElement('input');inp.type='file';inp.accept='.json';
+  inp.onchange=async function(e){
+    var f=e.target.files[0];if(!f)return;
+    try{await DataStore.importFromFile(f);toast('Data imported!','success');initAdmin();}
+    catch{toast('Invalid JSON file.','danger');}
+  };
+  inp.click();
+}
+
+/* ═══ ACCOUNT ═══ */
+function changePass(){
+  var cur=document.getElementById('sCur').value,nw=document.getElementById('sNew').value,cf=document.getElementById('sConf').value;
+  if(cur!==getPass()){showMsg('sMsg','❌ Current password wrong.','danger');return;}
+  if(nw.length<6){showMsg('sMsg','❌ Min 6 characters.','danger');return;}
+  if(nw!==cf){showMsg('sMsg','❌ Passwords do not match.','danger');return;}
+  localStorage.setItem(PK,nw);showMsg('sMsg','✅ Password changed!','success');
+  ['sCur','sNew','sConf'].forEach(function(i){document.getElementById(i).value='';});
+}
+function clearAll(key){
+  if(!confirmDel('Delete ALL '+key+'? This cannot be undone.'))return;
+  DataStore.set(key,[]);renderItemList();renderCatList();loadDash();toast('Cleared.','warning');
+}
+function showMsg(id,msg,type){var el=document.getElementById(id);if(!el)return;el.innerHTML='<div class="alert alert-'+type+'">'+msg+'</div>';setTimeout(function(){if(el)el.innerHTML='';},4000);}
+</script>
+</body>
+</html>
